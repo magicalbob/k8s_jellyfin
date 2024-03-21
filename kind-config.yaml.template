@@ -3,6 +3,7 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
   extraMounts:
-  - hostPath: $PWD/jellyfin-data
-    containerPath: /mnt/jellyfin-data
-
+  - hostPath: $PWD/jellyfin-media
+    containerPath: /mnt/jellyfin-media
+  - hostPath: $PWD/jellyfin-config
+    containerPath: /mnt/jellyfin-config

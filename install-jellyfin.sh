@@ -45,6 +45,18 @@ then
     kubectl create namespace jellyfin
 fi
 
+# sort out persistent volume
+if [ "X${USE_KIND}" == "XX" ]; then
+  export NODE_NAME=$(kubectl get nodes |grep control-plane|cut -d\  -f1|head -1)
+  envsubst < jellyfin.pv.kind.template > jellyfin.pv.yml
+else
+  export NODE_NAME=$(kubectl get nodes | grep -v ^NAME|grep -v control-plane|cut -d\  -f1|head -1)
+  envsubst < jellyfin.pv.linux.template > jellyfin.pv.yml
+  echo mkdir -p ${PWD}/jellyfin-media|ssh -o StrictHostKeyChecking=no ${NODE_NAME}
+  echo mkdir -p ${PWD}/jellyfin-config|ssh -o StrictHostKeyChecking=no ${NODE_NAME}
+fi
+kubectl apply -f jellyfin.pv.yml
+
 echo create deployment
 kubectl apply -f jellyfin.deployment.yaml
 
