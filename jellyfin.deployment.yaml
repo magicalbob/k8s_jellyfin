@@ -40,6 +40,10 @@ spec:
       labels:
         app: jellyfin
     spec:
+      dnsConfig:
+        nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
       containers:
       - name: jellyfin
         image: jellyfin/jellyfin:10.8.13
